@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class Nice extends Model
 {
-    protected $table            = 'race';
+    protected $table            = 'race_year';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';

@@ -1,30 +1,51 @@
 <?php
-
 namespace App\Controllers;
 
-use CodeIgniter\HTTP\RequestInterface;
-use CodeIgniter\HTTP\ResponseInterface;
-use Psr\Log\LoggerInterface;
 use App\Models\Nice;
-use Override;
+use CodeIgniter\View\Table;
 
 class Home extends BaseController
 {
-    protected $nice;
-
-    #[Override]
-    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
-    {
-        parent::initController($request, $response, $logger);
-        $this->nice = new Nice();
-    }
-
     public function index(): string
     {
-        $data_nice = $this->nice->like('default_name', 'Paris-Nice')->findAll();
+        $niceModel = new Nice();
+        $data_nice = $niceModel->like('real_name', 'Paris - Nice')->findAll();
+
+        $table = new Table();
+
+        $template = [
+            'table_open'         => '<table class="table table-bordered table-striped">', 
+            'thead_open'         => '<thead>', 
+            'thead_close'        => '</thead>', 
+            'heading_row_start'  => '<tr>', 
+            'heading_row_end'    => '</tr>', 
+            'heading_cell_start' => '<th>', 
+            'heading_cell_end'   => '</th>', 
+            'tbody_open'         => '<tbody>', 
+            'tbody_close'        => '</tbody>', 
+            'row_start'          => '<tr>', 
+            'row_end'            => '</tr>', 
+            'cell_start'         => '<td>', 
+            'cell_end'           => '</td>', 
+            'row_alt_start'      => '<tr>', 
+            'row_alt_end'        => '</tr>', 
+            'cell_alt_start'     => '<td>', 
+            'cell_alt_end'       => '</td>', 
+            'table_close'        => '</table>' 
+        ];
+        
+        $table->setTemplate($template);
+        $table->setHeading('ID', 'Název závodu');
+
+        foreach ($data_nice as $row) {
+            $table->addRow([
+                $row->id,
+                anchor('zavod/' . $row->id, $row->real_name)
+            ]);
+        }
 
         $data = [
-            "data_nice" => $data_nice
+            'table_html' => $table->generate()
         ];
 
         return view('index', $data);
