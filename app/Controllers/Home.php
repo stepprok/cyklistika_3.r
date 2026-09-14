@@ -21,7 +21,6 @@ class Home extends BaseController
 
     public function index(): string
     {
-        // Vyhledá v tabulce všechny řádky, kde sloupec 'default_name' obsahuje "Paris-Nice"
         $data_nice = $this->nice->like('default_name', 'Paris-Nice')->findAll();
 
         $data = [
