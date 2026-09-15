@@ -66,7 +66,7 @@ Spuštění:
 
 Pokud používáte vestavěný PHP server:
 
-Bash
+```
 php -S localhost:8000 -t public
 Nebo nastavte virtuální host v XAMPP / WAMP / Apache.
 
@@ -80,6 +80,7 @@ result: Výsledková listina:
 type_result = 1: Pořadí v etapě.
 
 type_result = 4: Celkové pořadí po etapě.
+```
 
 👤 Autor
 GitHub: @stepprok
