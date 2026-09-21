@@ -7,7 +7,7 @@
     <a href="<?= base_url(); ?>">Zpět na hlavní stránku</a>
     <p class="text-center">Informace o vybraném závodu <?= esc($data_nice->real_name) ?></p>
 
-    <h2>Detail ročníku: <?= esc($data_nice->real_name) ?> (<?= esc($data_nice->year) ?>)</h2>
+    <h2>Detail ročníku: <?= $data_nice->real_name ?> (<?= $data_nice->year ?>)</h2>
 
     <?php
     $table = new \CodeIgniter\View\Table();
