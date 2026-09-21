@@ -1,69 +1,86 @@
-# CodeIgniter 4 Application Starter
+# 🚴‍♂️ Cyklistika 3.r – Správa a Přehled Závodu Paříž – Nice
 
-## What is CodeIgniter?
+Tato webová aplikace postavená na PHP frameworku **CodeIgniter** slouží k přehledné prezentaci a správě cyklistických závodů se zaměřením na závod **Paříž – Nice (ID 124)**. Umožňuje prohlížet jednotlivé ročníky, etapy, výsledky a spravovat data pomocí administračního rozhraní.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+---
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## 📋 Přehled funkcí a specifikace
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+Aplikace splňuje následující funkční požadavky a specifikace úkolů:
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+### 1. Ročníky závodu
+* **UK-01 | Výpis ročníků:** Přehled všech ročníků závodu Paříž – Nice (ID 124) seřazených **od nejnovějšího po nejstarší**.
+* **UK-02 | Datum konání:** Zobrazení rozmezí konání závodu pro každý ročník ve formátu `D.M.YYYY - D.M.YYYY`.
+* **UK-03 | Celková délka:** Zobrazení celkové délky závodu v km, zaokrouhlené na celá čísla (`ROUND`).
 
-## Installation & updates
+### 2. Detail etapy & Výsledky
+* **UK-04 | Výpis etap:** Seznam všech etap v rámci daného ročníku seřazený vzestupně podle pořadí etapy (`1..N`).
+* **UK-05 | Údaje o etapě:** Zobrazení kompletních sloupců: datum etapy, délka etapy (km), převýšení (m) a typ etapy.
+* **UK-06 | Vítěz etapy:** Zobrazení jména / názvu vítěze etapy v samostatném sloupci.
+* **UK-07 | Odkaz na pořadí v etapě:** Dynamické URL odkazující na pořadí v etapě (vazba na tabulku `result` kde `type_result = 1`).
+* **UK-08 | Odkaz na pořadí po etapě:** Dynamické URL odkazující na celkové pořadí po etapě (vazba na tabulku `result` kde `type_result = 4`).
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+### 3. Formulář a Správa (Administrace)
+* **UK-09 | Přidání ročníku:** Samostatný formulář/list pro možnost přidávání nového ročníku závodu s poli:
+  * Název (`real_name`)
+  * ID závodu (`race_id`)
+  * Logo závodu (`logo`)
+* **UK-10 | Výběr závodu:** Výběr `race_id` pomocí dropdown filtru (omezeno pouze na mužské závody kategorie E přes číselník).
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+---
 
-## Setup
+## 🛠 Požadavky na prostředí (Prerequisites)
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+* **PHP:** >= 7.4 (nebo podle konkrétní verze CodeIgniteru 3 / 4)
+* **Databáze:** MySQL / MariaDB
+* **Webový server:** Apache (s povoleným `mod_rewrite`) nebo Nginx
+* **Composer** (pro správu závislostí)
 
-## Important Change with index.php
+---
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+## 🚀 Instalace a zprovoznění
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+1. **Klonování repozitáře:**
+   ```bash
+   git clone [https://github.com/stepprok/cyklistika_3.r.git](https://github.com/stepprok/cyklistika_3.r.git)
+   cd cyklistika_3.r
+Instalace závislostí:
 
-**Please** read the user guide for a better explanation of how CI4 works!
+composer install
+Konfigurace databáze a aplikace:
 
-## Repository Management
+Zkopírujte konfigurační soubor nebo nastavte přístup k databázi v application/config/database.php (CodeIgniter 3) nebo v souboru .env (CodeIgniter 4).
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+Nastavte přihlašovací údaje k MySQL databázi:
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+PHP
+'hostname' => 'localhost',
+'username' => 'vas_uzivatel',
+'password' => 'vase_heslo',
+'database' => 'databaze_cyklistika',
+Import databáze:
 
-## Server Requirements
+Importujte přiložený SQL dump do vaší MySQL databáze.
 
-PHP version 8.2 or higher is required, with the following extensions installed:
+Spuštění:
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+Pokud používáte vestavěný PHP server:
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
+```
+php -S localhost:8000 -t public
+Nebo nastavte virtuální host v XAMPP / WAMP / Apache.
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+🗄 Databázová struktura (Klíčové tabulky)
+race / rocnik: Uchovává ročníky, race_id, real_name, loga a termíny.
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+stage / etapa: Seznam etap, jejich typy, délky v km a převýšení v m.
+
+result: Výsledková listina:
+
+type_result = 1: Pořadí v etapě.
+
+type_result = 4: Celkové pořadí po etapě.
+```
+
+👤 Autor
+GitHub: @stepprok
