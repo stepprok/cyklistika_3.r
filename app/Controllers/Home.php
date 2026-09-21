@@ -2,52 +2,41 @@
 namespace App\Controllers;
 
 use App\Models\Nice;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\View\Table;
+use Psr\Log\LoggerInterface;
+use Override;
 
 class Home extends BaseController
 {
+    protected $niceModel;
+
+    #[Override]
+    public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
+    {
+        parent::initController($request, $response, $logger);
+        $this->niceModel = new Nice();
+    }
     public function index(): string
     {
-        $niceModel = new Nice();
-        $data_nice = $niceModel->like('real_name', 'Paris - Nice')->findAll();
-
-        $table = new Table();
-
-        $template = [
-            'table_open'         => '<table class="table table-bordered table-striped">', 
-            'thead_open'         => '<thead>', 
-            'thead_close'        => '</thead>', 
-            'heading_row_start'  => '<tr>', 
-            'heading_row_end'    => '</tr>', 
-            'heading_cell_start' => '<th>', 
-            'heading_cell_end'   => '</th>', 
-            'tbody_open'         => '<tbody>', 
-            'tbody_close'        => '</tbody>', 
-            'row_start'          => '<tr>', 
-            'row_end'            => '</tr>', 
-            'cell_start'         => '<td>', 
-            'cell_end'           => '</td>', 
-            'row_alt_start'      => '<tr>', 
-            'row_alt_end'        => '</tr>', 
-            'cell_alt_start'     => '<td>', 
-            'cell_alt_end'       => '</td>', 
-            'table_close'        => '</table>' 
-        ];
-        
-        $table->setTemplate($template);
-        $table->setHeading('ID', 'Název závodu');
-
-        foreach ($data_nice as $row) {
-            $table->addRow([
-                $row->id,
-                anchor('zavod/' . $row->id, $row->real_name)
-            ]);
-        }
+        $data_nice = $this->niceModel->like('real_name', 'Paris - Nice')->orderBy('year', 'ASC')->findAll();
 
         $data = [
-            'table_html' => $table->generate()
+            'data_nice' => $data_nice
         ];
 
         return view('index', $data);
+    }
+
+    public function detail($id)
+    {
+        $data_nice = $this->niceModel->find($id);
+
+        $data = [
+            'data_nice' => $data_nice
+        ];
+        
+        return view('detail', $data);
     }
 }
