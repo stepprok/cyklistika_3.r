@@ -42,7 +42,7 @@ foreach ($data_nice as $row) {
         anchor('zavod/' . $row->id, $row->real_name),
         $row->start_date,
         $row->end_date,
-        $row->total_distance . ' km'
+        round($row->total_distance) . ' km'
     ]);
 }
 
