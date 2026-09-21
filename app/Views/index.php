@@ -3,6 +3,7 @@
 <?= $this->section('content'); ?>
 
 <div class="p-1">
+    <br>
     <h1 class="text-center">Dobrý den</h1>
     <p class="text-center">Vítejte na mojí stránce o cyklistice</p>
 </div>
