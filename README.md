@@ -60,7 +60,7 @@ PHP
 'database' => 'databaze_cyklistika',
 Import databáze:
 
-Importujte přiložený SQL dump do vaší MySQL databáze.
+Poproste pana ucitela Hridny o fotky racers a databaze, pak je importujte do vaší MySQL databáze.
 
 Spuštění:
 
