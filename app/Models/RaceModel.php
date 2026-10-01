@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Nice extends Model
+class RaceModel extends Model
 {
-    protected $table            = 'race_year';
+    protected $table            = 'race';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['real_name', 'id_race', 'year', 'logo'];
+    protected $allowedFields    = ['name', 'sex', 'category'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

@@ -8,6 +8,13 @@
     <p class="text-center">Vítejte na mojí stránce o cyklistice</p>
 </div>
 
+<div class="d-flex justify-content-between align-items-center my-3">
+    <h1>Přehled závodů</h1>
+    <a href="<?= base_url('race-year/create'); ?>" class="btn btn-primary">
+        <i class="fa-solid fa-plus me-1"></i> Přidat nový ročník
+    </a>
+</div>
+
 <?php
 
 $table = new \CodeIgniter\View\Table();
