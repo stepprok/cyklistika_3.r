@@ -36,55 +36,51 @@
 
     $table->setHeading('ID', 'Etapa / Trasa', 'Datum', 'Délka (km)', 'Typ etapy', 'Vítěz', 'Pořadí v etapě', 'Pořadí po etapě');
 
-foreach ($stages as $stage) {
-    $stageName = (!empty($stage->departure) && !empty($stage->arrival)) 
-        ? $stage->departure . ' – ' . $stage->arrival 
-        : 'Etapa ' . ($stage->number ?? $stage->id);
+    foreach ($stages as $stage) {
+        $stageName = (!empty($stage->departure) && !empty($stage->arrival))
+            ? $stage->departure . ' – ' . $stage->arrival
+            : 'Etapa ' . ($stage->number ?? $stage->id);
 
-    // Vykreslení vítěze
-    if (!empty($stage->winner_last)) {
-        $winnerName = trim($stage->winner_first . ' ' . $stage->winner_last);
-        if (!empty($stage->winner_photo)) {
-            $photoUrl = base_url('img/riders/' . $stage->winner_photo);
-            $winnerOutput = '<div class="d-flex align-items-center gap-2">' 
-                . '<img src="' . $photoUrl . '" alt="' . $winnerName . '" style="width: 40px; height: 40px; object-fit: cover; object-position: top; border-radius: 50%; border: 1px solid #ccc;">' 
-                . '<span>' . $winnerName . '</span>' 
-                . '</div>';
+        if (!empty($stage->winner_last)) {
+            $winnerName = trim($stage->winner_first . ' ' . $stage->winner_last);
+            if (!empty($stage->winner_photo)) {
+                $photoUrl = base_url('img/riders/' . $stage->winner_photo);
+                $winnerOutput = '<div class="d-flex align-items-center gap-2">'
+                    . '<img src="' . $photoUrl . '" alt="' . $winnerName . '" style="width: 40px; height: 40px; object-fit: cover; object-position: top; border-radius: 50%; border: 1px solid #ccc;">'
+                    . '<span>' . $winnerName . '</span>'
+                    . '</div>';
+            } else {
+                $winnerOutput = $winnerName;
+            }
         } else {
-            $winnerOutput = $winnerName;
+            $winnerOutput = 'N/A';
         }
-    } else {
-        $winnerOutput = 'N/A';
+
+        $linkStageResult = '<a href="' . base_url('result/stage/' . $stage->id . '/1') . '" class="btn btn-sm btn-outline-primary">'
+            . 'Pořadí v etapě'
+            . '</a>';
+
+        $linkAfterStageResult = '<a href="' . base_url('result/stage/' . $stage->id . '/4') . '" class="btn btn-sm btn-outline-info">'
+            . 'Pořadí po etapě'
+            . '</a>';
+
+        $table->addRow([
+            $stage->id,
+            $stageName,
+            date('d.m.Y', strtotime($stage->date)),
+            round($stage->distance) . ' km',
+            $stage->parcour_name ?? 'N/A',
+            $winnerOutput,
+            $linkStageResult,
+            $linkAfterStageResult
+        ]);
     }
 
-    // Odkaz na pořadí v etapě (type_result = 1)
-    $linkStageResult = '<a href="' . base_url('result/stage/' . $stage->id . '/1') . '" class="btn btn-sm btn-outline-primary">'
-        . 'Pořadí v etapě'
-        . '</a>';
-
-    // Odkaz na pořadí po etapě (type_result = 4)
-    $linkAfterStageResult = '<a href="' . base_url('result/stage/' . $stage->id . '/4') . '" class="btn btn-sm btn-outline-info">'
-        . 'Pořadí po etapě'
-        . '</a>';
-
-    $table->addRow([
-        $stage->id,
-        $stageName,
-        date('d.m.Y', strtotime($stage->date)),
-        round($stage->distance) . ' km',
-        $stage->parcour_name ?? 'N/A',
-        $winnerOutput,
-        $linkStageResult,
-        $linkAfterStageResult
-    ]);
-}
-
-echo $table->generate();
-?>
+    echo $table->generate();
+    ?>
 
 </div>
 
-<!-- Skript pro dynamické řazení tabulky po kliknutí na hlavičku -->
 <script>
     <?= $this->include('Layout/sortable_table.js') ?>
 </script>

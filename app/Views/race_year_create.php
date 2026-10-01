@@ -15,21 +15,7 @@
         </div>
         <div class="card-body">
 
-            <!-- Zobrazení chyb z validace -->
-            <?php if (session()->getFlashdata('errors')): ?>
-                <div class="alert alert-danger">
-                    <ul class="mb-0 ps-3">
-                        <?php foreach (session()->getFlashdata('errors') as $error): ?>
-                            <li><?= $error ?></li>
-                        <?php endforeach ?>
-                    </ul>
-                </div>
-            <?php endif; ?>
-
             <form action="<?= base_url('race-year/store'); ?>" method="post" enctype="multipart/form-data">
-                <?= csrf_field(); ?>
-
-                <!-- Vstupní pole: Název ročníku (real_name) -->
                 <div class="mb-3">
                     <label for="real_name" class="form-label font-weight-bold">Název ročníku:</label>
                      <p>Pro uložení musí název obsahovat Paris - Nice</p>
@@ -37,7 +23,6 @@
                            value="<?= old('real_name') ?>" placeholder="Např. Paris - Nice 2024" required>
                 </div>
 
-                <!-- Dropdown výběr: Základní závod (id_race) z číselníku (pouze Muži / E) -->
                 <div class="mb-3">
                     <label for="id_race" class="form-label font-weight-bold">Závod (race_id):</label>
                     <select class="form-select" id="id_race" name="id_race" required>
@@ -51,20 +36,17 @@
                     <div class="form-text">Zobrazeny jsou pouze mužské závody kategorie E.</div>
                 </div>
 
-                <!-- Vstupní pole: Rok (year) -->
                 <div class="mb-3">
                     <label for="year" class="form-label font-weight-bold">Rok ročníku:</label>
                     <input type="number" class="form-control" id="year" name="year" 
                            value="<?= old('year', date('Y')) ?>" min="1900" max="2099" required>
                 </div>
 
-                <!-- Vstupní pole: Logo závodu (logo) -->
                 <div class="mb-4">
                     <label for="logo" class="form-label font-weight-bold">Logo závodu:</label>
                     <input class="form-control" type="file" id="logo" name="logo" accept="image/*" required>
                 </div>
 
-                <!-- Tlačítka -->
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-success">
                         <i class="fa-solid fa-plus me-1"></i> Uložit ročník

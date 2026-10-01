@@ -56,7 +56,7 @@
             }
 
             $table->addRow([
-                $position++ . '.', // Zobrazí 1., 2., 3... a zvýší hodnotu o +1
+                $position++ . '.', 
                 $riderOutput,
                 !empty($row->time) ? $row->time : '-',
                 (!empty($row->bonification) && $row->bonification > 0) ? $row->bonification . ' s' : '-'

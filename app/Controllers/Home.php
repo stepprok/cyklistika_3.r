@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Nice;
 use App\Models\RaceModel;
 use App\Models\Stage;
+use App\Models\Result;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\View\Table;
@@ -16,6 +17,7 @@ class Home extends BaseController
     protected $niceModel;
     protected $stage;
     protected $raceModel;
+    protected $resultModel;
 
     #[Override]
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
@@ -24,6 +26,7 @@ class Home extends BaseController
         $this->niceModel = new Nice();
         $this->stage = new Stage();
         $this->raceModel = new RaceModel();
+        $this->resultModel = new Result();
     }
     
     public function index()
@@ -69,17 +72,12 @@ class Home extends BaseController
 
     public function stageResult($stageId, $typeResult)
     {
-        // Načtení informací o etapě
         $stage = $this->stage->find($stageId);
         if (!$stage) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Etapa nebyla nalezena.');
         }
 
-        // Načtení výsledků pro danou etapu a typ výsledku
-        $db = \Config\Database::connect();
-        $builder = $db->table('fin_result');
-
-        $results = $builder->select('
+        $results = $this->resultModel->select('
             fin_result.*, 
             fin_rider.first_name, 
             fin_rider.last_name, 
@@ -103,7 +101,6 @@ class Home extends BaseController
 
     public function createRaceYear()
     {
-        // Výběr závodů přes RaceModel: pouze muži (M) a kategorie E
         $races = $this->niceModel
             ->where('sex', 'M')
             ->where('category', 'E')
@@ -120,7 +117,6 @@ class Home extends BaseController
 
     public function storeRaceYear()
     {
-        // Validace vstupů
         $rules = [
             'real_name' => 'required|min_length[3]',
             'id_race'   => 'required|integer',
@@ -132,7 +128,6 @@ class Home extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // Zpracování loga
         $logoFile = $this->request->getFile('logo');
         $logoName = null;
 
@@ -141,7 +136,6 @@ class Home extends BaseController
             $logoFile->move(FCPATH . 'assets/img/logos/', $logoName);
         }
 
-        // Uložení nového ročníku přes $this->niceModel
         $this->niceModel->insert([
             'real_name' => $this->request->getPost('real_name'),
             'id_race'   => $this->request->getPost('id_race'),
